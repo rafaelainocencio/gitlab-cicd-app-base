@@ -1,5 +1,6 @@
 stages:
   - test
+  - build
 
 realizar_testes:
   stage: test
@@ -9,3 +10,14 @@ realizar_testes:
     - npm install
   script:
     - npm test
+
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t app-docker .
+    - docker run -d -p 3000:3000 app-docker
