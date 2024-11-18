@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - deploy
 
 realizar_testes:
   stage: test
@@ -21,3 +22,11 @@ build_image:
   script:
     - docker build -t app-docker .
     - docker run -d -p 3000:3000 app-docker
+
+deploy_kubernetes:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f deployment.yaml
+    - kubectl apply -f service.yaml
+
